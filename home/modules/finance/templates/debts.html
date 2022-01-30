@@ -1,0 +1,50 @@
+{% extends "finance.html" %}
+{% block main_content %}
+    <h1>Finance Module</h1>
+    <a href="{% url 'finance' %}"><button>Back to Finance</button></a>
+    <a href="{% url 'add_debt' %}"><button>Add debt</button></a>
+    <a href="{% url 'add_repay' %}"><button>Add repay</button></a>
+
+    <div class="debt-container">
+        <h3>Debts to {{ user.username }}</h3>
+        <table style="border:1px">
+            <thead>
+                <tr>
+                    <td>Login</td>
+                    <td>Amount</td>
+                    <td>Repay</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for debt in debts %}
+                    <tr>
+                        <td>{{ debt.debtor }}</td>
+                        <td>{{ debt.amount }}</td>
+                        <td>{{ debt.repay }}</td>
+                        <td>{{ debt.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3>Income repays</h3>
+        <table style="border:1px">
+            <thead>
+                <tr>
+                    <td>Login</td>
+                    <td>Repay</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for repay in repays %}
+                    <tr>
+                        <td>{{ repay.debt.debtor }}</td>
+                        <td>{{ repay.amount }}</td>
+                        <td>{{ repay.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

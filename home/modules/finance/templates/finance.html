@@ -1,0 +1,7 @@
+{% extends "room_detail.html" %}
+{% block title %} {{ user.room.name}} | Finance {% endblock %}
+{% block main_content %}
+    <h1>Finance Module</h1>
+    <a href="{% url 'debts' %}"><button>Debts</button></a>
+
+{% endblock %}

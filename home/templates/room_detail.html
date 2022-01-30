@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% block title %} {{ user.room.name }} {% endblock %}
+{% block Article %} {{ user.room.name }} {% endblock %}
+{% block content %}
+    <div class="left-bar" style="float:left">
+        <p>Modules</p>
+        <ul>
+            <li><a href="{% url 'finance' %}">Finance</a></li>
+            <li>Clean-up</li>
+        </ul>
+    </div>
+    <div class="right-bar" style="float:right">
+        <div>
+            {{ user.username }}
+        </div>
+        <div class="inhabitants" style=" width: 100px; padding-right: 25px">
+            {% if users %}
+            <H3>Inhabitants</H3>
+            <table>
+                <thead>
+                <tr>
+                    <td> id </td>
+                    <td> username </td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for room_user in users %}
+                    <tr>
+                        <td> {{ room_user.id }} </td>
+                        <td> {{ room_user.username }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="main" style="padding-left: 200px;padding-right: 200px;padding-top: 50px">
+        {% block main_content %}Main{% endblock %}
+    </div>
+{% endblock %}

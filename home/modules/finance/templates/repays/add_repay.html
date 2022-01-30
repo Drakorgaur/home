@@ -1,0 +1,13 @@
+{% extends "finance.html" %}
+{% block main_content %}
+    <h1>Add debt</h1>
+    <a href="{% url 'finance' %}"><button>Back to Finance</button></a>
+    <a href="{% url 'debts' %}"><button>Back to Debts</button></a>
+    <form method="post">
+        {% if error %}<p>{{ error }}</p>{% endif %}
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Repay</button>
+    </form>
+
+{% endblock %}

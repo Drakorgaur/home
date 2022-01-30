@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% block title %} | Room Create {% endblock %}
+{% block Article %} | Room Create {% endblock %}
+{% block content %}
+    <form method="post">
+        {% if error  %}
+            <p>Error: {{ error }}</p>
+        {% endif %}
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
+{% endblock %}

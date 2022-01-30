@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Home {% endblock %}</title>
+    {% load static %}
+    <link type="text/css" rel="stylesheet" href="{% static 'topnav.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="top-bar" id="topnavtool">
+    <a class="{% if active == "home"%}active{% endif %}" href="{% url 'home' %}">Home</a>
+    <a class="{% if active == "room"%}
+                active
+              {% endif %}{% if not user.room.id %} disable
+              {% endif %}" href="{% url 'lobby' user.room.id %}">Room</a>
+    <a class={% if active == "profile"%}"active"{% endif %}>Profile</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
+    {{ user.username }}
+</div>
+<script>
+function myFunction() {
+  var x = document.getElementById("topnavtool");
+  if (x.className === "top-bar") {
+    x.style.height = "150px";
+    x.className += " responsive";
+  } else {
+    x.className = "top-bar";
+    x.style.height = "50px";
+  }
+}
+</script>
+<div class="content">
+    <h1>
+     Home {% block Article %}{% endblock %}
+    </h1>
+    <div class="main-content">
+        {% block content %}
+        <a href={% url 'create_room' %}><button>Create New Room</button></a>
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>
