@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Role
 from .forms import RoleForm
 
-ц
+
 def get_context(request):
     context = dict()
     context['user'] = request.user
