@@ -24,6 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('welcome/', include('welcome.urls')),
     path('home/', include('home.urls')),
-    path('home/', include('home.modules.finance.urls')),
     path('site/healthcheck', index),
 ]

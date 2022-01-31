@@ -1,0 +1,29 @@
+{% extends "room_detail.html" %}
+{% block title %} {{ user.room.name}} | Roles {% endblock %}
+{% block main_content %}
+    <h1>Roles Module</h1>
+    <a href="{% url 'debts' %}"><button>Set up roles</button></a>
+    <table>
+        <thead>
+        <tr>
+            <td>User</td>
+            <td>Role</td>
+            <td>Edit</td>
+        </tr>
+        </thead>
+        <tbody>
+            {% for role in rolse %}
+               <tr>
+                    <td>{{ role.user }}</td>
+                    <td>{{ role.role }}</td>
+                    <td>
+                        <a href="{% url 'update_role' role_id=role.id %}"><button>
+                        Update
+                        </button></a>
+                    </td>
+               </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

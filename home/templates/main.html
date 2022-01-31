@@ -5,7 +5,8 @@
     <title>{% block title %} Home {% endblock %}</title>
     {% load static %}
     <link type="text/css" rel="stylesheet" href="{% static 'topnav.css' %}">
-
+    {% block style %}
+    {% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
@@ -15,11 +16,10 @@
                 active
               {% endif %}{% if not user.room.id %} disable
               {% endif %}" href="{% url 'lobby' user.room.id %}">Room</a>
-    <a class={% if active == "profile"%}"active"{% endif %}>Profile</a>
+    <a class={% if active == "profile"%}"active"{% endif %}>{{ user.username }}</a>
     <a href="javascript:void(0);" class="icon" onclick="myFunction()">
         <i class="fa fa-bars"></i>
     </a>
-    {{ user.username }}
 </div>
 <script>
 function myFunction() {

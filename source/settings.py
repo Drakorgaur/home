@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'welcome',
     'home',
     'home.modules.finance',
+    'home.modules.roles',
 ]
 
 MIDDLEWARE = [
@@ -95,6 +96,7 @@ USE_TZ = True
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'welcome/static/'),
     os.path.join(BASE_DIR, 'home/static/'),
+    os.path.join(BASE_DIR, 'home/modules/finance/templates'),
 ]
 STATIC_URL = '/static/'
 

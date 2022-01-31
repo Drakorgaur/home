@@ -8,6 +8,8 @@ class DebtForm(forms.ModelForm):
 
 
 class RepayForm(forms.ModelForm):
+    def get(self, debt):
+        debt = debt
     class Meta:
         model = Repay
         fields = ('debt', 'amount', 'description')

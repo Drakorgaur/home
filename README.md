@@ -16,6 +16,23 @@
 ### Run
 
 >docker-compose up -d
+> 
+
+# Setting new module up
+1. Run dc command `docker-compose run -w /app/home/modules/ web django-admin startapp <app_name>`
+> Change permission for this folder on your local device.  
+> `sudo chown -R $USER:$USER .`
+2. Add next files to module:
+   * urls.py
+   * forms.py
+3. Add next directories:
+   * templates 
+   * static
+4. Include app in settings in `INSTALLED_APPS` add to bottom `home.modules.<app_name>`
+5. Include app urls to global urls. In `source/urls.py` add  
+    `path('<app_name>/', include('home.modules.<app_name>.urls')),`
+
+   
 
 User
 ---
