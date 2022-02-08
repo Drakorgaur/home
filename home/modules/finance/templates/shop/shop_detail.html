@@ -1,0 +1,29 @@
+{% extends "finance.html" %}
+{% block title %} {{ user.room.name}} {% endblock %}
+{% block main_content %}
+    <h1>Shop info</h1>
+    <h2>{{ shop.name }}</h2>
+    <label>
+        <textarea disabled readonly draggable="false">
+        {{ shop.location }}
+        </textarea>
+    </label>
+    <table>
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Cost</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% if roomproduct %}
+            {% for product in roomproduct %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.cost }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

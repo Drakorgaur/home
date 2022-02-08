@@ -1,0 +1,29 @@
+{% extends "common/common_list.html" %}
+
+{% block h1 %}To Buy{% endblock %}
+
+{% block top_buttons %}
+    <a href="{% url 'add_tobuy' %}"><button>Add To Buy Item</button></a>
+{% endblock %}
+
+{% block thead %}
+    <tr>
+        <td>Product</td>
+        <td>Cost</td>
+        <td>Shop</td>
+        <td>Creator</td>
+        <td></td>
+    </tr>
+{% endblock %}
+
+{% block tbody %}
+    {% for tobuy in tobuys %}
+        <tr>
+        <td>{{ tobuy.product }}</td>
+        <td>{{ tobuy.cost }}</td>
+        <td>{{ tobuy.shop }}</td>
+        <td>{{ tobuy.creator }}</td>
+        <td><a href="{% url 'delete_tobuy' pk=tobuy.pk %}"><button>Delete</button></a></td>
+        </tr>
+    {% endfor %}
+{% endblock %}

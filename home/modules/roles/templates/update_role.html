@@ -1,0 +1,12 @@
+{% extends "roles.html" %}
+{% block main_content %}
+    <h1>Roles Module</h1>
+    <a href="{% url 'roles' %}"><button>Back to roles</button></a>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+
+{% endblock %}

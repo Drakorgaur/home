@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %} Home {% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     {% load static %}
     <link type="text/css" rel="stylesheet" href="{% static 'topnav.css' %}">
     {% block style %}
     {% endblock %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="top-bar" id="topnavtool">
     <a class="{% if active == "home"%}active{% endif %}" href="{% url 'home' %}">Home</a>
     <a class="{% if active == "room"%}
                 active
-              {% endif %}{% if not user.room.id %} disable
-              {% endif %}" href="{% url 'lobby' user.room.id %}">Room</a>
+              {% endif %}
+              {% if user.room %}{% if not user.room.id %} disable
+              {% endif %}{% endif %}"
+       href="{% if user.room %}{% url 'lobby' user.room.id %}{% endif %}">Room</a>
     <a class={% if active == "profile"%}"active"{% endif %}>{{ user.username }}</a>
     <a href="javascript:void(0);" class="icon" onclick="myFunction()">
         <i class="fa fa-bars"></i>
@@ -35,7 +36,7 @@ function myFunction() {
 </script>
 <div class="content">
     <h1>
-     Home {% block Article %}{% endblock %}
+     {% block Article %}{% endblock %}
     </h1>
     <div class="main-content">
         {% block content %}

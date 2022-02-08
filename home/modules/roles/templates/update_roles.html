@@ -1,0 +1,15 @@
+{% extends "room_detail.html" %}
+{% block title %} {{ user.room.name}} | Roles {% endblock %}
+{% block main_content %}
+    <h1>Roles Module</h1>
+    <a href="{% url 'roles' %}"><button>Back to roles</button></a>
+    {% for form in forms %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.username }}
+            {{ form.form }}
+        <button type="submit" name="{{ form.username }}">Submit</button>
+        </form>
+
+    {% endfor %}
+{% endblock %}

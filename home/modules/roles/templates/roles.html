@@ -2,7 +2,19 @@
 {% block title %} {{ user.room.name}} | Roles {% endblock %}
 {% block main_content %}
     <h1>Roles Module</h1>
-    <a href="{% url 'debts' %}"><button>Set up roles</button></a>
+    <a href="{% url 'update_roles' room_id=user.room.id %}">
+        <button {% if role != 'A' %} disabled {% endif %}>Set up all roles</button>
+    </a>
+    <h2>Add user by username</h2>
+    <form method="post">
+        {% if form_error %}
+            <p class="error"> {{ form_error }} </p>
+        {% endif %}
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Add user</button>
+    </form>
+    <h2>Edit user role</h2>
     <table>
         <thead>
         <tr>
@@ -12,12 +24,13 @@
         </tr>
         </thead>
         <tbody>
-            {% for role in rolse %}
+            {% for user in roles %}
                <tr>
-                    <td>{{ role.user }}</td>
-                    <td>{{ role.role }}</td>
+                    <td>{{ user.user }}</td>
+                    <td>{{ user.role }}</td>
                     <td>
-                        <a href="{% url 'update_role' role_id=role.id %}"><button>
+                        <a href="{% url 'update_role' role_id=user.id %}">
+                        <button {% if role != 'A' %} disabled {% endif %}>
                         Update
                         </button></a>
                     </td>

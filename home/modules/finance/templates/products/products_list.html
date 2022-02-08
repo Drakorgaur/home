@@ -1,0 +1,27 @@
+{% extends "common/common_list.html" %}
+
+{% block h1 %}Products{% endblock %}
+{% block top_buttons %}
+    <a href="{% url 'add_product' %}"><button>Add product</button></a>
+{% endblock %}
+{% block thead %}
+    <tr>
+        <td>Name</td>
+        <td>Cost</td>
+        <td>Per Kg</td>
+        <td>Shop</td>
+    </tr>
+{% endblock %}
+{% block tbody %}
+    {% if roomproducts %}
+        {% for product in roomproducts %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.cost }}</td>
+                <td>{{ product.per_kg }}</td>
+                <td>{{ product.shop.name }}</td>
+                <td><a href="{% url 'edit_product' pk=product.pk %}"><button>Edit</button></a></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

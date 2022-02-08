@@ -1,0 +1,23 @@
+{% extends "common/common_list.html" %}
+
+{% block h1 %}Shops{% endblock %}
+
+{% block top_buttons %}
+    <a href="{% url 'add_shop' %}"><button>Add shop</button></a>
+{% endblock %}
+
+{% block thead %}
+    <tr>
+        <td>Name</td>
+        <td>Location</td>
+    </tr>
+{% endblock %}
+
+{% block tbody %}
+    {% for shop in shops %}
+        <tr>
+            <td><a href="{% url 'shop_detail' pk=shop.pk %}">{{ shop.name }}</a></td>
+            <td>{{ shop.location }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

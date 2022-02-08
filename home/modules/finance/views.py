@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Debt, DebtWallet, Repay
 from .forms import DebtForm, RepayForm
-from django.shortcuts import redirect
 
 #Helpers
 def get_context(request):

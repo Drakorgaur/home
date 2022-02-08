@@ -5,16 +5,17 @@
     <div class="left-bar" style="float:left">
         <p>Modules</p>
         <ul>
-            <li><a href="{% url 'finance' %}">Finance</a></li>
+            <li>{% block finance %}<a href="{% url 'finance' %}">Finance</a>{% endblock %}</li>
             <li>Clean-up</li>
             <li>Events</li>
             <li>Rules</li>
             <li><a href="{% url 'roles' %}">Roles</a></li>
         </ul>
     </div>
-    <div class="right-bar" style="float:right">
+    <div class="right-bar" style="float:right; width: 210px">
         <div>
-            {{ user.username }}
+            <p>{{ user.username }}</p>
+            <p>User status: {{ role }}</p>
         </div>
         <div class="inhabitants" style=" width: 100px; padding-right: 25px">
             {% if users %}
@@ -36,6 +37,7 @@
                 </tbody>
             </table>
             {% endif %}
+
         </div>
     </div>
     <div class="main" style="padding-left: 200px;padding-right: 200px;padding-top: 50px">

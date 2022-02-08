@@ -1,0 +1,12 @@
+* **HOME**
+  * **FINANCE**
+    * *DebtWallets*
+    * *Debts*
+    * *Repays*
+  * **ROLES**
+    * *Roles*
+  * *Rooms*
+* **WELCOME**
+  * Guests
+  * Users
+  * Visitors

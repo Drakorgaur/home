@@ -1,6 +1,17 @@
 {% extends "room_detail.html" %}
-{% block title %} {{ user.room.name}} | Finance {% endblock %}
+{% block title %} {{ user.room.name}}{% endblock %}
+    {% block finance %}
+        Finance
+        <ul>
+            <li><a href="{% url 'debts' %}">Debts</a></li>
+            <li><a href="{% url 'products_list' %}">Products</a></li>
+            <li><a href="{% url 'shops_list' %}">Shops</a></li>
+            <li><a href="{% url 'tobuy_list' %}">To Buy</a></li>
+            <li><a href="{% url 'shops_list' %}">Bought</a></li>
+        </ul>
+    {% endblock %}
 {% block main_content %}
+
     <h1>Finance Module</h1>
     <a href="{% url 'debts' %}"><button>Debts</button></a>
 

@@ -1,0 +1,13 @@
+{% extends "finance.html" %}
+{% block main_content %}
+    <h1>{% block h1 %}{% endblock %}</h1>
+    {% block top_buttons %}{% endblock %}
+    {% block form %}
+        <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+            <button type="submit">{% block button %}Add{% endblock %}</button>
+        </form>
+    {% endblock %}
+
+{% endblock %}

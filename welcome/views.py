@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from .models import User
 from .forms import LoginForm, UserRegistrationForm
 from django.contrib.auth import login as default_login
 from django.shortcuts import redirect
+from django.contrib.auth import logout
 
 
 def index(request):
@@ -20,9 +21,19 @@ def login(request):
                                      password=request.POST['password'])
             if user is not None:
                 default_login(request, user)
-                return redirect('index')
+                return redirect('welcome')
     form = LoginForm()
     return render(request, 'login.html', {'form': form } )
+
+
+def logout_(request):
+    logout(request)
+    return redirect('welcome')
+    # users = User.objects.all()
+    # for user in users:
+    #     user.set_password('random')
+    # return HttpResponse(make_password('random'))
+
 
 # TODO: add returns with err
 def register(request):
@@ -32,7 +43,7 @@ def register(request):
             new_user = form.save(commit=False)
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
-            return redirect('index')
+            return redirect('welcome')
     else:
         form = UserRegistrationForm()
     return render(request, 'registration.html', {'form': form})
@@ -42,7 +53,7 @@ class Auth(BaseBackend):
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist as e:
-            return HttpResponse(str(e))
+            return None
         if check_password(password, user.password):
             return user
         return None

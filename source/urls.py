@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
+from welcome.views import login, logout_
 
 def index(request):
     return HttpResponse(200)
@@ -23,6 +24,8 @@ def index(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('welcome/', include('welcome.urls')),
+    path('login', login, name='login'),
+    path('logout', logout_, name='logout'),
     path('home/', include('home.urls')),
     path('site/healthcheck', index),
 ]
