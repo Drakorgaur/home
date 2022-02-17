@@ -35,9 +35,14 @@ def common_detail(request, _class, pk, template, _subclass=None):
     return render(request, template, context)
 
 
-def common_list(request, _class, template):
-    context = get_context(request)
-    objects = _class.objects.all()
+def common_list(request, _class, template, context=None):
+    if context is None:
+        context = get_context(request)
+    room = context['room']
+    try:
+        objects = _class.objects.filter(room=room)
+    except Exception:
+        objects = _class.objects.all()
     key = (_class.__name__).lower()
     context[f'{key}s'] = objects
     return render(request, template, context)
@@ -47,7 +52,7 @@ def common_edit(request, _class, pk, _form, url, template, link=False):
     context = get_context(request)
     obj = _class.objects.get(pk=pk)
     if request.method == 'POST':
-        form = _form(request.POST)
+        form = _form(request.POST, instance=obj)
         if form.is_valid():
             save_object(request, form, link)
             return redirect(url)

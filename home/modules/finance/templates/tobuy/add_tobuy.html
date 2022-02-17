@@ -1,7 +1,59 @@
 {% extends "common/common_create.html" %}
+{% block style %}
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+{% endblock %}
 {% block h1 %}Add To Buy item{% endblock %}
 
 {% block top_buttons %}
     <a href="{% url 'products_list' %}"><button>Back to 'To buy' list</button></a>
+{% endblock %}
+
+{% block form %}
+    {{ productsJSON|json_script:'products' }}
+
+    <div id="tobuy-form">
+        <form method="post">
+                {% csrf_token %}
+                <label for="id_product">Product:</label>
+                    <select name="product" required="" id="id_product" @change="checkIfKilo(event)">
+                      <option v-for="product in products" v-bind:value="product.id">
+                          [[ product.name ]]
+                      </option>
+                    </select>
+                {{ form.as_p }}
+                <p id="id_weight" hidden>
+                    Weight:
+                    <label for="weight">
+                        <input name="weight" type="number" id="weight">
+                    </label>
+                </p>
+
+            <button type="submit">{% block button %}Add{% endblock %}</button>
+        </form>
+    </div>
+
+    <script>
+    var app = new Vue({
+        el: '#tobuy-form',
+        data: {
+            products: JSON.parse(document.getElementById('products').textContent),
+            per_kg: false
+        },
+        methods: {
+            checkIfKilo($event) {
+                console.log(this.$data.products)
+                for (const product in this.$data.products) {
+                    console.log(this.$data.products[product].id + '===' + event.target.value)
+                    if (this.$data.products[product].id == event.target.value) {
+                        console.log('Changed hidden attr')
+                        document.getElementById("id_weight").hidden = !this.$data.products[product].per_kg;
+                    }
+                }
+            }
+        },
+        delimiters: ["[[","]]"]
+    })
+    </script>
 {% endblock %}

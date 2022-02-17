@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Buying Mode</title>
+
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+{{ productsJSON|json_script:'tobuys' }}
+
+{{ usersJSON|json_script:'users' }}
+
+<div id="app">
+    <a href="{% url 'tobuy_list' %}"><button>Back To Home</button></a>
+            <table>
+                <thead>
+                </thead>
+                <tr>
+                    <td>Buy</td>
+                    <td>Name</td>
+                    <td>Cost</td>
+                    <td>Weight</td>
+                    <td>Not common</td>
+                    <td>Debtor</td>
+                </tr>
+
+                <tbody>
+                <tr v-for="tobuy in elems">
+                    <td>
+                        <label>
+                            <input type="checkbox" v-on:click="Buy(tobuy.id, tobuy.cost, $event)">
+                        </label>
+                    </td>
+                    <td>[[ tobuy.product.name ]]</td>
+                    <td>[[ tobuy.cost ]]</td>
+                    <td>
+                        <label>
+                            <input name="weight" type="number" v-show="tobuy.weight" v-bind:value="tobuy.weight"
+                                   @change="changeProductCost(event, tobuy,  tobuy.product.cost)">
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                                <input type="checkbox" v-on:click="NotCommon(tobuy.id, $event)" v-bind:id="tobuy.id" hidden>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <select v-if="ifBought.includes(tobuy.id) && isNotCommon.includes(tobuy.id)"
+                                    v-model="tobuy.creator" @change="changeOwner(event, tobuy.id)">
+                                <option v-for="user in users">
+                                    [[ user ]]
+                                </option>
+                            </select>
+                        </label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="ids"></label>
+            <input hidden v-bind:value="_toJSON(tobuys)" name="ids">
+        </p>
+        <button type="submit">Bought</button>
+    </form>
+</div>
+<script>
+                var app = new Vue({
+                  el: '#app',
+                  data: {
+                    tobuys: {},
+                    elems: (JSON.parse(document.getElementById('tobuys').textContent)),
+                    users: (JSON.parse(document.getElementById('users').textContent))[0].users,
+                    ifBought: [],
+                    isNotCommon: [],
+                  },
+                    methods: {
+                      Buy(id, cost, event) {
+                          if (event.target.checked) {
+                              this.$data.tobuys[id] = {'debtor': 0, 'amount': cost}
+                              this.$data.ifBought.push(id)
+                              document.getElementById(id).hidden = false
+                              console.log(this.$data.tobuys)
+
+                          } else {
+                              const index = this.$data.ifBought.indexOf(id)
+                              if (index > -1) {
+                                  this.$data.ifBought.splice(index, 1)
+                              }
+                              document.getElementById(id).hidden = true
+                              delete this.$data.tobuys[id]
+                          }
+                      },
+                        NotCommon(id, event) {
+                          if (event.target.checked) {
+                              this.$data.isNotCommon.push(id)
+                              this.$data.tobuys[id]['debtor'] = this.get_creator_by_id(id)
+                          } else {
+                              const index = this.$data.isNotCommon.indexOf( id)
+                              if (index > -1) {
+                                  this.$data.isNotCommon.splice(index, 1)
+                                  this.$data.tobuys[id]['debtor'] = 0
+                              }
+                          }
+                        },
+                        _toJSON(dict) {
+                          return JSON.stringify(dict)
+                        },
+                        get_creator_by_id(id) {
+                          for (const tobuy in this.elems) {
+                              console.log(this.elems[tobuy])
+                              if (this.elems[tobuy].id === id) {
+                                  return this.elems[tobuy].creator
+                              }
+                          }
+                        },
+                        changeOwner(event, value) {
+                          this.$data.tobuys[value]['debtor'] = event.target.value
+                        },
+                        changeProductCost(event, tobuy, product_cost) {
+                          tobuy.weight = event.target.value
+                          tobuy.cost = product_cost * tobuy.weight / 1000
+                          this.$data.tobuys[tobuy.id]['amount'] = tobuy.cost
+                        }
+                    },
+                  delimiters: ["[[","]]"]
+                });
+              </script>
+
+</body>
+</html>

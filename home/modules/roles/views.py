@@ -5,6 +5,7 @@ from home.models import Room
 from welcome.models import User
 from home.modules.roles.decorators.role_access import access
 from welcome.forms import AddUserForm
+from home.views import init_user_in_room
 
 
 def get_add_user_form(post=None):
@@ -33,13 +34,22 @@ def get_context(request):
     return context
 
 
+def add_user_to_room(user, room):
+    if user.room is not None:
+        return 'user already have room'
+    user.room = room
+    user.save()
+
+    init_user_in_room(user, user.room)
+
+
 def index(request):
     context = get_context(request)
     if request.method == 'POST':
         form = get_add_user_form(request.POST)
         if form.is_valid():
             user_to_add = User.objects.get(username=request.POST['username'])
-            context['form_error'] = self.add_user_to_room(user_to_add, room)
+            context['form_error'] = add_user_to_room(user_to_add, request.user.room)
             return render(request, 'room_detail.html', context)
         else:
             context['error'] = 'Invalid form'

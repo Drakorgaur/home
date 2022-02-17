@@ -29,10 +29,6 @@ def login(request):
 def logout_(request):
     logout(request)
     return redirect('welcome')
-    # users = User.objects.all()
-    # for user in users:
-    #     user.set_password('random')
-    # return HttpResponse(make_password('random'))
 
 
 # TODO: add returns with err

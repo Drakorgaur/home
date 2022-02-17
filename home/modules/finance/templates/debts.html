@@ -8,57 +8,95 @@
 {% endif %}
 
 <div class="debt-container">
-    <h3>Debts to {{ user.username }}</h3>
-    <table style="border:1px">
-        <thead>
-            <tr>
-                <td class="standarttd">Login</td>
-                <td class="standarttd">Amount</td>
-                <td class="standarttd">Repay</td>
-                <td class="description">Description</td>
-                <td class="standarttd"></td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for debt in debts %}
-            <tr>
-                <td class="standarttd">{{ debt.debtor }}</td>
-                <td class="standarttd">{{ debt.amount }}</td>
-                <td class="standarttd">{{ debt.repay }}</td>
-                <td class="description">{{ debt.description }}</td>
-                <td class="standarttd">
-                    <a href="{% url 'add_repay' debt_id=debt.pk %}">
-                        <button style="width: 60px">Repay</button>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <h3>Income repays</h3>
-    <table style="border:1px">
-        <thead>
-            <tr>
-                <td class="standarttd">Login</td>
-                <td class="standarttd">Repay</td>
-                <td class="description">Description</td>
-                <td class="standarttd"></td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for repay in repays %}
-            <tr>
-                <td class="standarttd">{{ repay.debt.debtor }}</td>
-                <td class="standarttd">{{ repay.amount }}</td>
-                <td class="description">{{ repay.description }}</td>
-                <td class="standarttd">
-                    <a href="{% url 'approve_repay' repay_id=repay.pk%}"><button style="width: 60px">Approve</button></a>
-                    <a href="{% url 'decline_repay' repay_id=repay.pk%}"><button style="width: 60px">Decline</button></a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div>
+        {% if income_debts %}
+            <h3>Debts to {{ user.username }}</h3>
+            <table style="border:1px">
+                <thead>
+                    <tr>
+                        <td class="standarttd">Login</td>
+                        <td class="standarttd">Amount</td>
+                        <td class="standarttd">Repay</td>
+                        <td class="description">Description</td>
+                        <td class="standarttd"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for debt in income_debts %}
+                    <tr>
+                        <td class="standarttd">{{ debt.debtor }}</td>
+                        <td class="standarttd">{{ debt.amount }}</td>
+                        <td class="standarttd">{{ debt.repay }}</td>
+                        <td class="description">{{ debt.description }}</td>
+                        <td class="standarttd">
+                            <a href="{% url 'add_repay' debt_id=debt.pk %}">
+                                <button style="width: 60px">Repay</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    <div>
+        {% if outcome_debts %}
+        <h3>Your debts</h3>
+        <table>
+            <thead>
+             <tr>
+                    <td class="standarttd">Login</td>
+                    <td class="standarttd">Amount</td>
+                    <td class="standarttd">Repay</td>
+                    <td class="description">Description</td>
+                    <td class="standarttd"></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for debt in outcome_debts %}
+                    <tr>
+                        <td class="standarttd">{{ debt.debtor }}</td>
+                        <td class="standarttd">{{ debt.amount }}</td>
+                        <td class="standarttd">{{ debt.repay }}</td>
+                        <td class="description">{{ debt.description }}</td>
+                        <td class="standarttd">
+                            <a href="{% url 'add_repay' debt_id=debt.pk %}">
+                                <button style="width: 60px">Repay</button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    <div>
+        {% if repays %}
+            <h3>Income repays</h3>
+            <table style="border:1px">
+                <thead>
+                    <tr>
+                        <td class="standarttd">Login</td>
+                        <td class="standarttd">Repay</td>
+                        <td class="description">Description</td>
+                        <td class="standarttd"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for repay in repays %}
+                    <tr>
+                        <td class="standarttd">{{ repay.debt.debtor }}</td>
+                        <td class="standarttd">{{ repay.amount }}</td>
+                        <td class="description">{{ repay.description }}</td>
+                        <td class="standarttd">
+                            <a href="{% url 'approve_repay' repay_id=repay.pk%}"><button style="width: 60px">Approve</button></a>
+                            <a href="{% url 'decline_repay' repay_id=repay.pk%}"><button style="width: 60px">Decline</button></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

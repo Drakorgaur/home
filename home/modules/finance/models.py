@@ -1,7 +1,7 @@
 from django.db import models
 from welcome.models import User
 from home.models import Room
-
+from django.db.models import JSONField
 
 class DebtWallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -19,7 +19,12 @@ class Debt(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='debt_creator')
 
     def __str__(self):
+        if self.description:
+            return "[ debtor: {} ]  {} - {}".format(str(self.debtor), str(self.description), str(self.amount))
         return "[ {} ] to [ {} ] | {}".format(str(self.debtor), str(self.wallet), str(self.amount))
+
+    def field_names(self):
+        return ['wallet', 'debtor', 'amount', 'repay', 'description', 'creator']
 
 
 class Repay(models.Model):
@@ -75,6 +80,9 @@ class RoomProduct(Product):
 
 
 class Buy(models.Model):
+    cost = models.FloatField()
+    weight = models.IntegerField(null=True, blank=True)
+
     class Meta:
         abstract = True
 
@@ -83,6 +91,8 @@ class ToBuy(Buy):
     product = models.ForeignKey(RoomProduct, on_delete=models.RESTRICT, related_name='tb_product')
     shop = models.ForeignKey(Shop, on_delete=models.RESTRICT, related_name='tb_shop', blank=True, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tb_creator')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='tobuy_room',
+                             null=True)
     active = models.BooleanField(blank=False)
 
 
@@ -90,11 +100,15 @@ class ToBuy(Buy):
         return str(self.product)
 
 
-class Bought(Buy):
-    product = models.ForeignKey(ToBuy, on_delete=models.RESTRICT, related_name='bgh_product')
-    shop = models.ForeignKey(Shop, on_delete=models.RESTRICT, related_name='bgh_shop')
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bgh_creator')
+class Bought(models.Model):
+    date = models.DateField(default='2001-01-01')
+    receipt = JSONField()
+    cost = models.FloatField()
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bgh_creator')
+    shop = models.ForeignKey(Shop, on_delete=models.RESTRICT, related_name='bgh_shop', blank=True, null=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bought_room',
+                             null=True)
 
 
     def __str__(self):
-        return str(self.product)
+        return "[{}] {}".format(str(self.date), str(self.buyer))

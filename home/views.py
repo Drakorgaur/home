@@ -6,8 +6,8 @@ from django.views.generic.detail import DetailView
 from welcome.models import User
 from django.http import HttpResponse
 from home.Helpers.room import *
-# from home.modules.roles.models import Role
-# from .models import Room
+from home.modules.roles.models import Role
+from .models import Room
 
 
 def index(request):
@@ -76,13 +76,6 @@ def invite_link_adding(request, code):
 
 class Lobby(DetailView):
     model = Room
-    def add_user_to_room(self, user, room):
-        if user.room is not None:
-            return 'user already have room'
-        user.room = room
-        user.save()
-
-        init_user_in_room(user, user.room)
 
     # TODO: refactor to DISPATCH(wait for vue.js)
     def dispatch(self, request, *args, **kwargs):

@@ -15,6 +15,7 @@ ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 AUTH_USER_MODEL = 'welcome.User'
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     'home',
     'home.modules.finance',
     'home.modules.roles',
+    'API'
 ]
 
 MIDDLEWARE = [

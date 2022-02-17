@@ -37,4 +37,12 @@ urlpatterns += [
     path('tobuy/add', add_tobuy, name='add_tobuy'),
     path('tobuy/del/<int:pk>', delete_tobuy, name='delete_tobuy'),
     path('tobuy/edit/<int:pk>', edit_tobuy, name='edit_tobuy'),
+
+    path('shopping', buying_mode, name='buying_mode')
 ]
+
+
+
+urlpatterns += [
+    path('archive', boughts, name='boughts')
+    ]

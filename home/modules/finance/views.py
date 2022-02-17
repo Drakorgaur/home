@@ -10,12 +10,17 @@ def get_context(request):
     context = dict()
     context['user'] = request.user
     try:
-        context['debts'] = Debt.objects.filter(wallet=get_wallet(request))
+        context['income_debts'] = Debt.objects.filter(wallet=get_wallet(request))
     except Debt.DoesNotExist:
-        context['debts'] = None
+        context['income_debts'] = None
+
+    try:
+        context['outcome_debts'] = Debt.objects.filter(debtor=request.user)
+    except Debt.DoesNotExist:
+        context['outcome_debts'] = None
 
     repays = list()
-    for debt in context['debts']:
+    for debt in context['income_debts']:
         try:
             repays += Repay.objects.filter(debt=debt)
         except Debt.DoesNotExist:
@@ -37,25 +42,31 @@ def debts(request):
     context = get_context(request)
     return render(request, 'debts.html', context)
 
+
+def create_debt(data, wallet, request):
+    context = get_context(request)
+    form = DebtForm(data)
+    if form.is_valid():
+        debt = form.save(commit=False)
+        if wallet is not None:
+            debt.wallet = wallet
+        else:
+            context['error'] = 'You are trying to add debt to account that have no Wallet. ' \
+                               'Please create wallet before continue'
+            return render(request, 'debts.html', context)
+        debt.creator = request.user
+        debt.save()
+        return redirect('debts')
+    else:
+        context['error'] = 'form is invalid'
+        return render(request, 'add_debt.html', context)
+
+
 def add_debt(request):
     context = get_context(request)
     if request.method == 'POST':
-        form = DebtForm(request.POST)
-        if form.is_valid():
-            debt = form.save(commit = False)
-            wallet = get_wallet(request)
-            if wallet is not None:
-                debt.wallet = wallet
-            else:
-                context['error'] = 'You are trying to add debt to account that have no Wallet. ' \
-                                   'Please create wallet before continue'
-                return render(request, 'debts.html', context)
-            debt.creator = request.user
-            debt.save()
-            return redirect('debts')
-        else:
-            context['error'] = 'form is invalid'
-            return render(request, 'add_debt.html', context)
+        # TODO: add wallet for func create_debt()
+        return create_debt(request.POST, get_wallet(request), request)
     else:
         form = DebtForm()
         context['form'] = form
