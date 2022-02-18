@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from welcome.models import User
 from home.models import Room
-from home.modules.finance.models import Debt, DebtWallet, Repay, Shop, Product
+from home.modules.finance.models import Debt, DebtWallet, Repay, Shop, Product, ToBuy, Bought
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,7 +74,25 @@ class RepaySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ShopSerilizer(serializers.ModelSerializer):
+class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
         fields = ('name', )
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class ToBuySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ToBuy
+        fields = '__all__'
+
+
+class BoughtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bought
+        fields = '__all__'

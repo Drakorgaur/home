@@ -1,21 +1,38 @@
 from django.shortcuts import render
 from .serializers import *
 from welcome.models import User
-from home.modules.finance.models import DebtWallet, Debt, Repay
+from home.modules.finance.models import DebtWallet, Debt, Repay, ToBuy, Bought, RoomProduct
 from home.models import Room
 from django.http import HttpResponse, JsonResponse
 
 
-def users_API(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
+def API_by_id(_class, pk):
+    try:
+        objects = _class.objects.get(pk=pk)
+    except _class.DoesNotExist:
+        return JsonResponse({})
+    SerializerClass = globals()[str(_class.__name__) + 'Serializer']
+    serializer = SerializerClass(objects)
+
     return JsonResponse(serializer.data, safe=False)
+
+
+def API_all(_class):
+    try:
+        objects = _class.objects.all()
+    except _class.DoesNotExist:
+        return JsonResponse({})
+    SerializerClass = globals()[str(_class.__name__) + 'Serializer']
+    serializer = SerializerClass(objects, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+def users_API(request):
+    return API_all(User)
 
 
 def user_id_API(request, pk):
-    user = User.objects.get(pk=pk)
-    serializer = UserSerializer(user)
-    return JsonResponse(serializer.data, safe=False)
+    return API_by_id(User, pk)
 
 
 def user_username_API(request, username):
@@ -25,15 +42,11 @@ def user_username_API(request, username):
 
 
 def rooms_API(request):
-    rooms = Room.objects.all()
-    serializer = RoomSerializer(rooms, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    return API_all(Room)
 
 
 def room_id_API(request, pk):
-    room = Room.objects.get(pk=pk)
-    serializer = RoomSerializer(room)
-    return JsonResponse(serializer.data, safe=False)
+    return API_by_id(Room, pk)
 
 
 def room_name_API(request, name):
@@ -65,14 +78,42 @@ def debt_by_wallet_API(request, username):
 
 
 def repay_by_id_API(request, pk):
-    repay = Repay.objects.get(pk=pk)
-    serializer = RepaySerializer(repay, many=False)
+    return API_by_id(Repay, pk)
+
+
+def shops_API(request):
+    return API_all(Shop)
+
+
+def shop_by_id_API(request, pk):
+    return API_by_id(Shop, pk)
+
+
+def products_API(request):
+    return API_all(RoomProduct)
+
+
+def product_by_id_API(request, pk):
+    return API_by_id(RoomProduct, pk)
+
+
+def tobuy_by_id_API(request, pk):
+    return API_by_id(ToBuy, pk)
+
+
+def tobuy_by_creator_API(request, username):
+    user = User.objects.get(username=username)
+    tobuys = ToBuy.objects.filter(creator=user)
+    serializer = ToBuySerializer(tobuys, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 
-def shops_API():
-    pass
+def bought_by_id_API(request, pk):
+    return API_by_id(Bought, pk)
 
 
-def shop_by_id(request, pk):
-    pass
+def bought_by_creator_API(request, username):
+    user = User.objects.get(username=username)
+    tobuys = ToBuy.objects.filter(creator=user)
+    serializer = ToBuySerializer(tobuys, many=True)
+    return JsonResponse(serializer.data, safe=False)

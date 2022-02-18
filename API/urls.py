@@ -12,10 +12,21 @@ urlpatterns = [
 
     path('wallet/<str:username>', wallet_API, name="wallet_name"),
 
-    path('debt/to/<str:username>', debt_by_wallet, name="debt_by_wallet"),
-    path('debt/from/<str:username>', debt_by_debtor, name="debt_by_debtor"),
+    path('debt/to/<str:username>', debt_by_wallet_API, name="debt_by_wallet"),
+    path('debt/from/<str:username>', debt_by_debtor_API, name="debt_by_debtor"),
 
-    path('repay/<int:pk>', repay_by_id, name="repay_by_id"),
+    path('repay/<int:pk>', repay_by_id_API, name="repay_by_id"),
 
-    path('shop/<int:pk>', shop_by_id, name="shop_by_id"),
+    path('shops', shops_API, name="shops"),
+    path('shop/<int:pk>', shop_by_id_API, name="shop_by_id"),
+
+    path('products', products_API, name="products"),
+    path('product/<int:pk>', product_by_id_API, name="product_by_id"),
+
+    path('tobuy/<int:pk>', tobuy_by_id_API, name="tobuy_by_id"),
+    path('tobuy/creator/<str:username>', tobuy_by_creator_API, name="tobuy_by_creator"),
+
+    path('bought/<int:pk>', bought_by_id_API, name="bought_by_id"),
+    path('bought/creator/<str:username>', bought_by_creator_API, name="bought_by_creator"),
+
 ]

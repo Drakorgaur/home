@@ -2,7 +2,7 @@ import logging
 import factory
 import faker
 from welcome.models import User
-from home.modules.finance.models import DebtWallet, Debt, Repay, Shop
+from home.modules.finance.models import DebtWallet, Debt, Repay, Shop, RoomProduct, ToBuy, Bought
 from home.models import Room
 from pytest_factoryboy import register
 from django.contrib.auth.hashers import make_password
@@ -49,3 +49,27 @@ class ShopFactory(factory.Factory):
     name = factory.Faker('word')
     class Meta:
         model = Shop
+
+
+class RoomProductFactory(factory.Factory):
+    name = factory.Faker('word')
+    cost = factory.Faker('pyfloat', positive=True)
+    per_kg = factory.Faker('boolean')
+    category = 'ot'
+    class Meta:
+        model = RoomProduct
+
+
+class ToBuyFactory(factory.Factory):
+    cost = factory.Faker('pyfloat', positive=True)
+    active = 1
+    class Meta:
+        model = ToBuy
+
+
+class BoughtFactory(factory.Factory):
+    date = factory.Faker('date')
+    cost = factory.Faker('pyfloat', positive=True)
+
+    class Meta:
+        model = Bought

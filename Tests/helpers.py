@@ -3,6 +3,11 @@ from .models_factory import *
 register(UserFactory)
 register(RoomFactory)
 
+
+def get_body(response):
+    return response.content.decode(response.charset)
+
+
 def get_room_with_user(linked=True):
     room = get_room()
     user = get_user()
@@ -86,5 +91,58 @@ def get_repay(repay_creator=None, debt_owner=None, debt_debtor=None):
 
 def get_shop():
     shop = ShopFactory.create()
-    shop.save()
     return shop
+
+
+def get_product(room=None, shop=None):
+    if shop is None:
+        shop = ShopFactory.create()
+        shop.save()
+    if room is None:
+        room = RoomFactory.create()
+        room.save()
+    product = RoomProductFactory.create()
+    product.room = room
+    product.shop = shop
+    return product
+
+
+def get_tobuy(product=None, creator=None):
+    tobuy = ToBuyFactory.create()
+    if product is None:
+        product = get_product()
+        product.save()
+    tobuy.product = product
+    tobuy.shop = product.shop
+
+    if creator is None:
+        creator = UserFactory.create()
+        creator.save()
+    tobuy.creator = creator
+    tobuy.save()
+    return tobuy
+
+
+def get_bought(tobuy=None, buyer=None):
+    if tobuy is None:
+        tobuy = get_tobuy()
+        tobuy.save()
+    if buyer is None:
+        buyer = get_user()
+        buyer.save()
+    bought = BoughtFactory.create()
+    bought.receipt = get_random_json(tobuy)
+    bought.buyer = buyer
+    bought.save()
+    return bought
+
+
+def get_random_json(tobuy):
+    return {
+        tobuy.pk: {
+            'amount': str(factory.Faker('pyfloat')),
+            'debtor': tobuy.creator.pk,
+            'description': str(factory.Faker('text')),
+        }
+    }
+
